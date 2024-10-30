@@ -47,10 +47,23 @@ public class CSVPerson {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+
         return personList;
     }
 
-    public void deletePersonById(int id) {
+    public static void deletePersonById(int id) {
+        List<Person> personList = getPersonList();
+        System.out.println(personList);
+        personList.removeIf(person -> person.getId() == id);
+            try (FileWriter fileWriter = new FileWriter(FILE_NAME)){
+                injectHeaderColumns(fileWriter);
+                for (Person person : personList) {
+                    fileWriter.write(person.toString());
+                    fileWriter.write("\n");
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
     }
 }
